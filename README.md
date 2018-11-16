@@ -2,7 +2,6 @@
 > Asíncrono Ajax sin jQuery
 
 
----
 ### 🗃️ POST
 
 Desde un formulario:
@@ -38,4 +37,8 @@ asynjax.post('index.php', {
 	}
 });
 ```
+
+---
+### 🗃️ GET
+
 
