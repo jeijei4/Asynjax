@@ -4,6 +4,19 @@
 
 ### 🗃️ POST
 
+Sin parámetros:
+```js
+asynjax.post('index.php', {
+	result: function (isSuccessful, data) {
+		if (isSuccessful) {
+			console.log('Success: ', data);
+		} else {
+			console.error('Error: ' + data);
+		}
+	}
+});
+```
+
 Desde un formulario:
 ```js
 var form = document.getElementById('frmTest');
