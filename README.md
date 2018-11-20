@@ -7,7 +7,7 @@
 Sin parámetros:
 ```js
 asynjax.post('index.php', {
-	result: function (isSuccessful, data) {
+	result: function (isSuccessful, data) { // data es un String
 		if (isSuccessful) {
 			console.log('Success: ', data);
 		} else {
