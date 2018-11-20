@@ -17,6 +17,20 @@ asynjax.post('index.php', {
 });
 ```
 
+Utilizar credenciales ([Ver](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)) :
+```js
+asynjax.post('index.php', {
+	withCredentials: true, // Default false
+	result: function (isSuccessful, data) {
+		if (isSuccessful) {
+			console.log('Success: ', data);
+		} else {
+			console.error('Error: ' + data);
+		}
+	}
+});
+```
+
 Obtener el resultado como un objeto JSON:
 ```js
 asynjax.post('index.php', {
