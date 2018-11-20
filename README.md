@@ -19,7 +19,7 @@ asynjax.post('index.php', {
 
 Desde un formulario:
 ```js
-var form = document.getElementById('frmTest');
+var form = document.getElementById('idFormulario');
 
 asynjax.post('index.php', {
 	params: asynjax.getForm(form),
