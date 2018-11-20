@@ -49,7 +49,8 @@ asynjax.post('index.php', {
 		}
 	}
 }, formData);
-
+```
+```js
 //Forma 2:
 asynjax.post('index.php', {
 	params: asynjax.getFormData(formData),
