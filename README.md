@@ -4,7 +4,7 @@
 
 ### 🗃️ POST
 
-Sin parámetros:
+Forma sencilla:
 ```js
 asynjax.post('index.php', {
 	result: function (isSuccessful, data) { // data es un String
