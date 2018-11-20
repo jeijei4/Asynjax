@@ -59,6 +59,12 @@ asynjax.post('index.php', {
 		}
 	}
 });
+
+/* 
+ * También se puede pasar el formulario a un objeto FormData:
+ * var formData = new FormData(form);
+ * ... y enviar el formData ...
+*/
 ```
 
 Desde un objeto FormData:
