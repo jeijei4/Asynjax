@@ -6,8 +6,20 @@
 
 Forma sencilla:
 ```js
+asynjax.post('index.php', {result: function (isSuccessful, data) { // data es un String
+		if (isSuccessful) {
+			console.log('Success: ', data);
+		} else {
+			console.error('Error: ' + data);
+		}
+	}
+});
+```
+Con parámetros:
+```js
 asynjax.post('index.php', {
-	result: function (isSuccessful, data) { // data es un String
+	params: {Usuario:'Kendry', Edad:19 },
+	result: function (isSuccessful, data) {
 		if (isSuccessful) {
 			console.log('Success: ', data);
 		} else {
