@@ -17,6 +17,20 @@ asynjax.post('index.php', {
 });
 ```
 
+Obtener el resultado como un objeto JSON:
+```js
+asynjax.post('index.php', {
+	asJson: true,
+	result: function (isSuccessful, data) {
+		if (isSuccessful) {
+			console.log('Success: ', data); // data es un JSON.
+		} else {
+			console.error('Error: ' + data);
+		}
+	}
+});
+```
+
 Desde un formulario:
 ```js
 var form = document.getElementById('idFormulario');
@@ -70,7 +84,6 @@ Subir archivos:
 <input id="inputArchivo" type="file" lang="es" accept="*" multiple="multiple">
 ```
 ```js
-
 //Función que añade un evento a un objeto del DOM
 function listen(str_evento, elemento, funcion) {
 	console.log('Pasó por listen');
@@ -87,10 +100,12 @@ function listen(str_evento, elemento, funcion) {
 		}
 	}
 }
-
+```
+```js
 //Añadimos el evento Change a inputArchivo para que ejecute la función enviarArchivo:
 listen('Change', document.getElementById('inputArchivo'), enviarArchivo);
-
+```
+```js
 function enviarArchivo() {
 	const input = document.getElementById('inputArchivo');
 	if (input.files) {
