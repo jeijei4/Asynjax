@@ -38,7 +38,8 @@ Desde un objeto FormData:
 var formData = new FormData();
 formData.append('Usuario', 'Kendry');
 formData.append('Edad', 19);
-
+```
+```js
 //Forma 1:
 asynjax.post('index.php', {
 	result: function (isSuccessful, data) {
