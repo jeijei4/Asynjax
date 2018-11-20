@@ -39,6 +39,18 @@ var formData = new FormData();
 formData.append('Usuario', 'Kendry');
 formData.append('Edad', 19);
 
+//Forma 1:
+asynjax.post('index.php', {
+	result: function (isSuccessful, data) {
+		if (isSuccessful) {
+			console.log('Success: ', data);
+		} else {
+			console.error('Error: ' + data);
+		}
+	}
+}, formData);
+
+//Forma 2:
 asynjax.post('index.php', {
 	params: asynjax.getFormData(formData),
 	result: function (isSuccessful, data) {
