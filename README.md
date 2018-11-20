@@ -34,7 +34,7 @@ asynjax.post('index.php', {
 Obtener el resultado como un objeto JSON:
 ```js
 asynjax.post('index.php', {
-	asJson: true,
+	asJson: true, // Default false
 	result: function (isSuccessful, data) {
 		if (isSuccessful) {
 			console.log('Success: ', data); // data es un JSON.
