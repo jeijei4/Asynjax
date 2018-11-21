@@ -130,8 +130,9 @@ function listen(txtEvento, elemento, funcion) {
 }
 ```
 ```js
-//Añadimos el evento Change a inputArchivo para que ejecute la función enviarArchivo:
-listen('Change', document.getElementById('inputArchivo'), enviarArchivo);
+//Añadimos el evento Change al elemento inputArchivo para que ejecute la función enviarArchivo:
+const elemento = document.getElementById('inputArchivo');
+listen('Change', elemento, enviarArchivo);
 ```
 ```js
 function enviarArchivo() {
