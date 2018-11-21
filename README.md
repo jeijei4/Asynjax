@@ -7,8 +7,8 @@
 Forma sencilla:
 ```js
 asynjax.post('index.php', {
-	result: function (isSuccessful, data) {
-		console.log('Es exitoso: ' + isSuccessful + ', Respuesta: ' + data);
+	result: function (exitoso, respuesta) {
+		console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
 	}
 });
 ```
@@ -16,11 +16,11 @@ Con parámetros:
 ```js
 asynjax.post('index.php', {
 	params: {Usuario:'Kendry', Edad:19 },
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data);
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta);
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 });
@@ -30,25 +30,25 @@ Utilizar credenciales ([Ver](https://developer.mozilla.org/en-US/docs/Web/API/XM
 ```js
 asynjax.post('index.php', {
 	withCredentials: true, // Default false
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data);
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta);
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 });
 ```
 
-Obtener el resultado como un objeto JSON:
+Obtener la respuesta como un objeto JSON:
 ```js
 asynjax.post('index.php', {
 	asJson: true, // Default false
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data); // data es un JSON.
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta); // respuesta es un JSON.
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 });
@@ -60,11 +60,11 @@ var form = document.getElementById('idFormulario');
 
 asynjax.post('index.php', {
 	params: asynjax.getForm(form),
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data);
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta);
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 });
@@ -85,11 +85,11 @@ formData.append('Edad', 19);
 ```js
 //Forma 1:
 asynjax.post('index.php', {
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data);
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta);
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 }, formData);
@@ -98,11 +98,11 @@ asynjax.post('index.php', {
 //Forma 2:
 asynjax.post('index.php', {
 	params: asynjax.getFormData(formData),
-	result: function (isSuccessful, data) {
-		if (isSuccessful) {
-			console.log('Success: ', data);
+	result: function (exitoso, respuesta) {
+		if (exitoso) {
+			console.log('Éxito: ', respuesta);
 		} else {
-			console.error('Error: ' + data);
+			console.error('Error: ' + respuesta);
 		}
 	}
 });
@@ -148,11 +148,11 @@ function enviarArchivo() {
 			progress: function (percentage) {
 				console.log('Progreso: ' + percentage + '%');
 			},
-			result: function (isSuccessful, data) {
-				if (isSuccessful) {
-					console.log('Success: ', data);
+			result: function (exitoso, respuesta) {
+				if (exitoso) {
+					console.log('Éxito: ', respuesta);
 				} else {
-					console.error('Error: ' + data);
+					console.error('Error: ' + respuesta);
 				}
 			}
 		}, formData);
