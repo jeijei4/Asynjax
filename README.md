@@ -15,7 +15,7 @@ asynjax.post('index.php', {
 Con parámetros:
 ```js
 asynjax.post('index.php', {
-	params: {Usuario:'Kendry', Edad:19 },
+	params: {Usuario:'Kendry', Edad:19},
 	result: function (exitoso, respuesta) {
 		if (exitoso) {
 			console.log('Éxito: ', respuesta);
