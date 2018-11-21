@@ -114,7 +114,7 @@ Subir archivos:
 ```
 ```js
 //Función que añade un evento a un objeto del DOM
-function listen(txtEvento, elemento, funcion) {
+function evento(txtEvento, elemento, funcion) {
 	if (elemento.addEventListener) /* W3C DOM */
 		return elemento.addEventListener(txtEvento.toLowerCase(), funcion, false);
 	else if (elemento.attachEvent) /* IE DOM */
@@ -132,7 +132,7 @@ function listen(txtEvento, elemento, funcion) {
 ```js
 //Añadimos el evento Change al elemento inputArchivo para que ejecute la función enviarArchivo:
 const elemento = document.getElementById('inputArchivo');
-listen('Change', elemento, enviarArchivo);
+evento('Change', elemento, enviarArchivo);
 ```
 ```js
 function enviarArchivo() {
