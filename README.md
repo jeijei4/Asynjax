@@ -115,7 +115,6 @@ Subir archivos:
 ```js
 //Función que añade un evento a un objeto del DOM
 function listen(txtEvento, elemento, funcion) {
-	console.log('Pasó por listen');
 	if (elemento.addEventListener) /* W3C DOM */
 		return elemento.addEventListener(txtEvento.toLowerCase(), funcion, false);
 	else if (elemento.attachEvent) /* IE DOM */
