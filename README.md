@@ -114,17 +114,17 @@ Subir archivos:
 ```
 ```js
 //Función que añade un evento a un objeto del DOM
-function listen(str_evento, elemento, funcion) {
+function listen(txtEvento, elemento, funcion) {
 	console.log('Pasó por listen');
 	if (elemento.addEventListener) /* W3C DOM */
-		return elemento.addEventListener(str_evento.toLowerCase(), funcion, false);
+		return elemento.addEventListener(txtEvento.toLowerCase(), funcion, false);
 	else if (elemento.attachEvent) /* IE DOM */
-		return elemento.attachEvent("on" + str_evento, funcion);
+		return elemento.attachEvent("on" + txtEvento, funcion);
 	else {
 		try {
-			elemento["on" + str_evento] = funcion;
+			elemento["on" + txtEvento] = funcion;
 		} catch (err) {
-			throw 'No es posible añadir el evento ' + str_evento;
+			throw 'No es posible añadir el evento ' + txtEvento;
 			return false;
 		}
 	}
