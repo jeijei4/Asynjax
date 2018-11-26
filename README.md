@@ -108,7 +108,10 @@ asynjax.post('index.php', {
 });
 ```
 
-Subir archivos:
+Ejemplo práctico:
+<details>
+<summary>Subir archivos</summary>
+
 ```html
 <input id="inputArchivo" type="file" lang="es" accept="*" multiple="multiple">
 ```
@@ -159,6 +162,8 @@ function enviarArchivo() {
 	}
 }
 ```
+
+</details>
 
 
 ---
