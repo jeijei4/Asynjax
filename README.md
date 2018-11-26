@@ -4,27 +4,29 @@
 
 ### 🗃️ POST
 
-Forma sencilla:
+Forma sencilla
+```js
+asynjax.post('index.php', function (exitoso, respuesta) {
+	console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
+});
+```
+
+<details>
+<summary>Con parámetros</summary>
+
 ```js
 asynjax.post('index.php', {
-	result: function (exitoso, respuesta) {
-		console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
+	params: {Usuario: 'Kendry', Edad: 19}
+}, function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
 	}
 });
 ```
-Con parámetros:
-```js
-asynjax.post('index.php', {
-	params: {Usuario:'Kendry', Edad:19},
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-```
+
+</details>
 
 Utilizar credenciales ([Ver](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)) :
 ```js
