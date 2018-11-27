@@ -16,8 +16,8 @@ Enviar datos al servidor
 ```js
 //Desde un objeto FormData:
 var nFormData = new FormData();
-nFormData.append('Usuario', 'Kendry');
-nFormData.append('Edad', 19);
+    nFormData.append('Usuario', 'Kendry');
+    nFormData.append('Edad', 19);
 
 asynjax.post('index.php', {
 	formData: nFormData
