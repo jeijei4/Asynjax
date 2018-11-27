@@ -21,8 +21,7 @@ var nFormData = new FormData();
 
 asynjax.post('index.php', {
 	formData: nFormData
-},
-function (exitoso, respuesta) {
+}, function (exitoso, respuesta) {
 	if (exitoso) {
 		console.log('Éxito: ', respuesta);
 	} else {
@@ -37,8 +36,7 @@ var nForm = document.getElementById('idFormulario');
 asynjax.post('index.php', {
 	form: nForm,
 	hideClass: 'noEnviar' // (Opcional) Si algún elemento tiene la clase especificada, no será enviado.
-},
-function (exitoso, respuesta) {
+}, function (exitoso, respuesta) {
 	if (exitoso) {
 		console.log('Éxito: ', respuesta);
 	} else {
@@ -65,11 +63,10 @@ asynjax.post('index.php', {
     withCredentials: true, // Utilizar credenciales. Default false.
     asJson: true, // Obtener la respuesta como un objeto JSON. Default false.
     contentType: 'application/json; charset=UTF-8', // Default 'application/x-www-form-urlencoded; charset=UTF-8'.
-    progress: function (percentage) {
-   	console.log('Progreso: ' + percentage + '%');
+    progress: function (porcentaje) {
+   	console.log('Progreso: ' + porcentaje + '%');
     }
-},
-function (exitoso, respuesta) {
+}, function (exitoso, respuesta) {
     console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
 });
 ```
@@ -115,17 +112,17 @@ function enviarArchivo() {
 		for(var i=0; i<cant; ++i) formData.append("arrayArchivos[]", input.files[i], input.files[i].name);
 
 		asynjax.post('index.php', {
-			progress: function (percentage) {
-				console.log('Progreso: ' + percentage + '%');
-			},
-			result: function (exitoso, respuesta) {
-				if (exitoso) {
-					console.log('Éxito: ', respuesta);
-				} else {
-					console.error('Error: ' + respuesta);
-				}
-			}
-		}, formData);
+                    formData: formData,
+                    progress: function (porcentaje) {
+                        console.log('Progreso: ' + porcentaje + '%');
+                    }
+                }, function (exitoso, respuesta) {
+                    if (exitoso) {
+                        console.log('Éxito: ', respuesta);
+                    } else {
+                        console.error('Error: ' + respuesta);
+                    }
+                });
 	}
 }
 ```
