@@ -10,10 +10,9 @@ asynjax.post('index.php', function (exitoso, respuesta) {
 	console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
 });
 ```
-
-<details>
-<summary>Enviar datos al servidor</summary>
-
+<br><br>
+Enviar datos al servidor
+<br><br>
 ```js
 //Desde un objeto FormData:
 var nFormData = new FormData();
@@ -60,13 +59,12 @@ asynjax.post('index.php', {
 });
 ```
 
-</details>
 
-
-Ejemplo práctico:
 <details>
-<summary>Subir archivos</summary>
+<summary>Ejemplo práctico</summary>
 
+<br>Subir archivos al servidor:
+<br><br>	
 ```html
 <input id="inputArchivo" type="file" lang="es" accept="*" multiple="multiple">
 ```
