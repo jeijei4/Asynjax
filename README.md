@@ -12,9 +12,43 @@ asynjax.post('index.php', function (exitoso, respuesta) {
 ```
 
 <details>
-<summary>Con parámetros</summary>
+<summary>Enviar datos al servidor</summary>
 
 ```js
+//Desde un objeto FormData:
+var nFormData = new FormData();
+nFormData.append('Usuario', 'Kendry');
+nFormData.append('Edad', 19);
+
+asynjax.post('index.php', {
+	formData: nFormData
+},
+function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
+	}
+});
+```
+```js
+//Desde un formulario:
+var nForm = document.getElementById('idFormulario');
+
+asynjax.post('index.php', {
+	form: nForm,
+	hideClass: 'noEnviar' //Si algún elemento tiene la clase especificada, no será enviado.
+},
+function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
+	}
+});
+```
+```js
+//Con parámetros:
 asynjax.post('index.php', {
 	params: {Usuario: 'Kendry', Edad: 19}
 }, function (exitoso, respuesta) {
@@ -28,87 +62,6 @@ asynjax.post('index.php', {
 
 </details>
 
-Utilizar credenciales ([Ver](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)) :
-```js
-asynjax.post('index.php', {
-	withCredentials: true, // Default false
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-```
-
-Obtener la respuesta como un objeto JSON:
-```js
-asynjax.post('index.php', {
-	asJson: true, // Default false
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta); // respuesta es un JSON.
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-```
-
-Desde un formulario:
-```js
-var form = document.getElementById('idFormulario');
-
-asynjax.post('index.php', {
-	params: asynjax.getForm(form),
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-
-/* 
- * También se puede pasar el formulario a un objeto FormData:
- * var formData = new FormData(form);
- * ... y enviar el formData ...
-*/
-```
-
-Desde un objeto FormData:
-```js
-var formData = new FormData();
-formData.append('Usuario', 'Kendry');
-formData.append('Edad', 19);
-```
-```js
-//Forma 1:
-asynjax.post('index.php', {
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-}, formData);
-```
-```js
-//Forma 2:
-asynjax.post('index.php', {
-	params: asynjax.getFormData(formData),
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-```
 
 Ejemplo práctico:
 <details>
