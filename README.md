@@ -59,6 +59,20 @@ asynjax.post('index.php', {
 });
 ```
 
+Otras opciones disponibles
+```js
+asynjax.post('index.php', {
+    withCredentials: true, // Utilizar credenciales. Default false.
+    asJson: true, // Obtener la respuesta como un objeto JSON. Default false.
+    contentType: 'application/json; charset=UTF-8', // Default 'application/x-www-form-urlencoded; charset=UTF-8'.
+    progress: function (percentage) {
+   	console.log('Progreso: ' + percentage + '%');
+    }
+},
+function (exitoso, respuesta) {
+    console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
+});
+```
 
 <details>
 <summary>Ejemplo práctico</summary>
