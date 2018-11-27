@@ -36,7 +36,7 @@ var nForm = document.getElementById('idFormulario');
 
 asynjax.post('index.php', {
 	form: nForm,
-	hideClass: 'noEnviar' //Si algún elemento tiene la clase especificada, no será enviado.
+	hideClass: 'noEnviar' // (Opcional) Si algún elemento tiene la clase especificada, no será enviado.
 },
 function (exitoso, respuesta) {
 	if (exitoso) {
