@@ -10,9 +10,9 @@ asynjax.post('index.php', function (exitoso, respuesta) {
 	console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
 });
 ```
-<br><br>
+
 Enviar datos al servidor
-<br><br>
+<br>
 ```js
 //Desde un objeto FormData:
 var nFormData = new FormData();
