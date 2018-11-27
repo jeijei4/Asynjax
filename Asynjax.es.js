@@ -4,46 +4,16 @@
  * Copyright (c) 2018 JeiHO (https://github.com/jeijei4/Asynjax)
  * Licensed under MIT (http://www.opensource.org/licenses/mit-license.php)
  *
- * Version: 1.0.0
+ * Version: 2.0.0
  *
  */
 
-/* 
-* Polyfill
-* developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/map#Polyfill
-*/
-if (!Array.prototype.map) {
-    Array.prototype.map = function (callback, thisArg) {
-        let T, A, k;
-        if (this == null) {
-            throw new TypeError(' esto es nulo o no está definido');
-        }
-        let O = Object(this);
-        let len = O.length >>> 0;
-        if ('function' !== typeof callback) {
-            throw new TypeError(callback + ' no es una función');
-        }
-        if (arguments.length > 1) {
-            T = thisArg;
-        }
-        A = new Array(len);
-        k = 0;
-        while (k < len) {
-
-            let kValue, mappedValue;
-            if (k in O) {
-                kValue = O[k];
-                mappedValue = callback.call(T, kValue, k, O);
-                A[k] = mappedValue;
-            }
-            k++;
-        }
-        return A;
-    };
-}
-
 var asynjax = {};
 
+asynjax.contains = function (a, b) {
+    // true: si a contiene b.
+    return (new RegExp(b.toLowerCase(), "g")).test(a.toLowerCase());
+};
 asynjax.httpRequest = function () {
     'use strict';
     // Determine si el objeto XMLHttpRequest es compatible
@@ -72,6 +42,21 @@ asynjax.httpRequest = function () {
     return xhr;
 };
 
+asynjax.param = function (xJson, prefix) {
+    //https://stackoverflow.com/a/1714899/9463541
+    var str = [], p;
+    for (p in xJson) {
+        if (xJson.hasOwnProperty(p) && xJson[p]) {
+            var k = prefix ? prefix + "[" + p + "]" : p,
+                v = xJson[p];
+            str.push((v !== null && typeof v === "object") ?
+                asynjax.param(v, k) :
+                encodeURIComponent(k) + "=" + encodeURIComponent(v));
+        }
+    }
+    return str.join("&");
+};
+
 asynjax.getFormData = function (formData) {
     let r = {};
     try {
@@ -85,16 +70,57 @@ asynjax.getFormData = function (formData) {
     return r;
 };
 
-asynjax.getForm = function (xform) {
+asynjax.getForm = function (xform, hideClass) {
     let r = {};
     try {
-        const elements = xform.querySelectorAll("input, select, textarea");
-        for (let i = 0; i < elements.length; ++i) {
+        const elements = xform.querySelectorAll('input:not([type="radio"]):not([type="checkbox"]), input[type="checkbox"]:checked, input[type="radio"]:checked, select, textarea');
+
+        const elemLength = elements.length;
+        for (let i = 0; i < elemLength; ++i) {
             const element = elements[i];
-            const key = element.name;
+            const tagName = elements[i].tagName.toLowerCase();
+            var key = element.name;
             const value = element.value;
             if (key) {
-                r[key] = value;
+                if ('select' === tagName && true === element.multiple) {
+                    var selectedArray = [];
+                    var j;
+                    var count = 0;
+                    const selectLength = element.options.length;
+                    for (j = 0; j < selectLength; ++j) {
+                        if (element.options[j].selected) {
+                            selectedArray[count] = element.options[j].value;
+                            ++count;
+                        }
+                    }
+                    if (hideClass.length === 0 || asynjax.contains(element.className, hideClass) === false) {
+
+                        const optLength = selectedArray.length;
+                        var hilera = '';
+                        for (k = 0; k < optLength; ++k) {
+                            if ('' !== hilera) {
+                                hilera += ',';
+                            }
+                            if ('string' === typeof(selectedArray[k])) {
+                                hilera += '"' + selectedArray[k] + '"';
+                            } else {
+                                hilera += selectedArray[k];
+                            }
+                        }
+                        const allHilera = '"' + key + '":[' + hilera + ']';
+                        var textObject = JSON.stringify(r);
+                        if (textObject === '{}') {
+                            r = JSON.parse('{' + allHilera + '}');
+                        } else {
+
+                            r = JSON.parse('{' + textObject.substring(1, textObject.length - 1) + ',' + allHilera + '}');
+                        }
+                    }
+                } else {
+                    if (hideClass.length === 0 || asynjax.contains(element.className, hideClass) === false) {
+                        r[key] = value;
+                    }
+                }
             }
         }
     } catch (err) {
@@ -104,18 +130,13 @@ asynjax.getForm = function (xform) {
     return r;
 };
 
-asynjax.parseParams = function (xJson) {
-    return Object.keys(xJson).map(
-        function (k) {
-            return encodeURIComponent(k) + '=' + encodeURIComponent(xJson[k])
-        }
-    ).join('&');
-};
 
 asynjax.textError = function (xStatus, xStatusText, xResponseText) {
     'use strict';
-    let xResponse = xResponseText.trim();
-    if (xResponse.match(/sesi/g) && xResponse.match(/expirado/g)) {
+    const xResponse = xResponseText.trim();
+    const respLower = xResponse.toLowerCase();
+
+    if (asynjax.contains(respLower, 'sesi') === true && asynjax.contains(respLower, 'expirado') === true) {
         return 'La sesión ha expirado';
     }
     else {
@@ -248,15 +269,17 @@ asynjax.textError = function (xStatus, xStatusText, xResponseText) {
     }
 };
 
-asynjax.send = function (url, method, request, formData) {
+asynjax.send = function (url, method, xFunction, options) {
     'use strict';
     let client = asynjax.httpRequest();
     client.open(method, url, true, null, null);
 
-    client.withCredentials = (true === request.withCredentials); //default false;
+    const withOptions = ('object' === typeof options);
+
+    client.withCredentials = (true === withOptions && true === options.withCredentials); //default false;
 
     client.ontimeout = function () {
-        console.error("El tiempo de espera para la solicitud " + url + " a caducado.");
+        console.error('Asynjax error: El tiempo de espera para la solicitud ' + url + ' a caducado.');
     };
 
     client.onerror = function () {
@@ -268,7 +291,7 @@ asynjax.send = function (url, method, request, formData) {
             if (client.status === 200) {// 200 = OK
                 let responseText = client.responseText;
 
-                if (true === request.asJson) {
+                if (true === withOptions && true === options.asJson) {
                     let getData = responseText.trim();
                     try {
                         responseText = JSON.parse(getData);
@@ -283,92 +306,96 @@ asynjax.send = function (url, method, request, formData) {
                     }
                 }
 
-                request.result && request.result(true, responseText);
+                xFunction(true, responseText);
             } else {
                 // Devolución de llamada de error
-                request.result && request.result(false, asynjax.textError(client.status, client.statusText, client.responseText));
+                xFunction(false, asynjax.textError(client.status, client.statusText, client.responseText));
             }
         }
     };
 
-    if (request.progress) {
+    if (true === withOptions && 'function' === typeof options.progress) {
         client.upload.onprogress = function (event) {
             let p = '?';
             if (event.lengthComputable) {
                 p = Math.round((event.loaded / event.total) * 100);
             }
-            request.progress(p);
+            options.progress(p);
         };
     }
 
-    if (method === 'POST') {
-        client.setRequestHeader("Cache-Control", "no-cache");
-        client.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        if ('object' === typeof formData) {
-            client.send(formData);
+/////////////////////////////////////////////////////////////////////////////////////	
+
+    client.setRequestHeader("Cache-Control", "no-cache");
+    client.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    if (method === 'POST' && true === withOptions) {
+        if ('object' === typeof options.formData) {
+            client.send(options.formData);
         } else {
-            if (request.contentType) {
-                client.setRequestHeader('Content-Type', request.contentType);
+            if (options.contentType) {
+                client.setRequestHeader('Content-Type', options.contentType);
             }
-            client.send(request.params);
+            if (options.form) {
+                const hideClass = ('string' === typeof options.hideClass) ? options.hideClass : '';
+
+                const xForm = asynjax.getForm(options.form, hideClass);
+                client.send(asynjax.param(xForm));
+            } else {
+                if (null === options.params) {
+                    client.send();
+                } else {
+                    client.send(options.params);
+                }
+            }
         }
     } else {
         client.send();
     }
 };
 
-asynjax.get = function (url, request) {
+
+asynjax.post = function (url, options, xFunction) {
     'use strict';
-    if (request.params) {
-        try {
-            let query = [];
-            for (let key in request.params) {
-                if (!request.params.hasOwnProperty(key)) continue;
-                query.push(encodeURIComponent(key) + '=' + encodeURIComponent(request.params[key]));
+    if ('function' === typeof options) {
+        //Se envía sin parámetros
+        asynjax.send(url, 'POST', options);
+    } else if ('function' === typeof xFunction) {
+        if ('object' === typeof options) {
+            // Solicitud con contentType false, sin procesamiento de datos;
+            if (options.contentType !== false) {
+                if (options.contentType && asynjax.contains(options.contentType, 'json') === true) {
+                    if (options.params) {
+                        try {
+                            options.params = JSON.stringify(options.params);
+                        } catch (err) {
+                            throw new Error(err.message);
+                        }
+                    } else {
+                        options.params = null;
+                    }
+                    options.contentType = 'application/json; charset=UTF-8';
+                } else {
+                    if (options.params) {
+                        try {
+                            options.params = asynjax.param(options.params);
+                        } catch (err) {
+                            throw new Error(err.message);
+                        }
+                    } else {
+                        options.params = null;
+                    }
+                    options.contentType = options.contentType || 'application/x-www-form-urlencoded; charset=UTF-8';
+                }
             }
-            asynjax.send(url + (query.length ? '?' + query.join('&') : ''), 'GET', request);
-        } catch (err) {
-            throw new Error(err.message);
+            asynjax.send(url, 'POST', xFunction, options);
+        } else {
+            console.error("Asynjax error: Parámetro inválido, se requiere un objeto.");
+            return false;
         }
     } else {
-        request.params = null;
-        asynjax.send(url, 'GET', request);
-    }
-};
-
-asynjax.post = function (url, request, formData) {
-    'use strict';
-    if ('object' === typeof formData) {
-        asynjax.send(url, 'POST', request, formData);
-    } else {
-        // Solicitud con contentType false, sin procesamiento de datos;
-        if (request.contentType !== false) {
-            if (request.contentType && request.contentType.match(/json/g)) {
-                if (request.params) {
-                    try {
-                        request.params = JSON.stringify(request.params);
-                    } catch (err) {
-                        throw new Error(err.message);
-                    }
-                } else {
-                    request.params = null;
-                }
-                request.contentType = 'application/json; charset=UTF-8';
-            } else {
-                if (request.params) {
-                    try {
-                        request.params = asynjax.parseParams(request.params);
-                    } catch (err) {
-                        throw new Error(err.message);
-                    }
-                } else {
-                    request.params = null;
-                }
-
-                request.contentType = request.contentType || 'application/x-www-form-urlencoded; charset=UTF-8';
-            }
-        }
-        asynjax.send(url, 'POST', request);
+        console.error("Asynjax error: No se encontró la función de salida.");
+        return false;
     }
 };
 //----//
