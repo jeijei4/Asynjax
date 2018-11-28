@@ -4,114 +4,78 @@
 
 ### 🗃️ POST
 
-Forma sencilla:
+Forma sencilla
 ```js
-asynjax.post('index.php', {
-	result: function (exitoso, respuesta) {
-		console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
-	}
-});
-```
-Con parámetros:
-```js
-asynjax.post('index.php', {
-	params: {Usuario:'Kendry', Edad:19},
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
+asynjax.post('index.php', function (exitoso, respuesta) {
+	console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
 });
 ```
 
-Utilizar credenciales ([Ver](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)) :
+Enviar datos al servidor
+<br>
 ```js
+//Desde un objeto FormData:
+var nFormData = new FormData();
+    nFormData.append('Usuario', 'Kendry');
+    nFormData.append('Edad', 19);
+
 asynjax.post('index.php', {
-	withCredentials: true, // Default false
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
+	formData: nFormData
+}, function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
 	}
 });
 ```
-
-Obtener la respuesta como un objeto JSON:
 ```js
+//Desde un formulario:
+var nForm = document.getElementById('idFormulario');
+
 asynjax.post('index.php', {
-	asJson: true, // Default false
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta); // respuesta es un JSON.
-		} else {
-			console.error('Error: ' + respuesta);
-		}
+	form: nForm,
+	hideClass: 'noEnviar' // (Opcional) Si algún elemento tiene la clase especificada, no será enviado.
+}, function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
 	}
 });
 ```
-
-Desde un formulario:
 ```js
-var form = document.getElementById('idFormulario');
-
+//Con parámetros:
 asynjax.post('index.php', {
-	params: asynjax.getForm(form),
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-});
-
-/* 
- * También se puede pasar el formulario a un objeto FormData:
- * var formData = new FormData(form);
- * ... y enviar el formData ...
-*/
-```
-
-Desde un objeto FormData:
-```js
-var formData = new FormData();
-formData.append('Usuario', 'Kendry');
-formData.append('Edad', 19);
-```
-```js
-//Forma 1:
-asynjax.post('index.php', {
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
-	}
-}, formData);
-```
-```js
-//Forma 2:
-asynjax.post('index.php', {
-	params: asynjax.getFormData(formData),
-	result: function (exitoso, respuesta) {
-		if (exitoso) {
-			console.log('Éxito: ', respuesta);
-		} else {
-			console.error('Error: ' + respuesta);
-		}
+	params: {Usuario: 'Kendry', Edad: 19}
+}, function (exitoso, respuesta) {
+	if (exitoso) {
+		console.log('Éxito: ', respuesta);
+	} else {
+		console.error('Error: ' + respuesta);
 	}
 });
 ```
 
-Ejemplo práctico:
+Otras opciones disponibles
+```js
+asynjax.post('index.php', {
+    withCredentials: true, // Utilizar credenciales. Default false.
+    asJson: true, // Obtener la respuesta como un objeto JSON. Default false.
+    contentType: 'application/json; charset=UTF-8', // Default 'application/x-www-form-urlencoded; charset=UTF-8'.
+    progress: function (porcentaje) {
+   	console.log('Progreso: ' + porcentaje + '%');
+    }
+}, function (exitoso, respuesta) {
+    console.log('Éxito: ' + exitoso + ', Respuesta: ' + respuesta);
+});
+```
+
 <details>
-<summary>Subir archivos</summary>
+<summary>Ejemplo práctico</summary>
 
+<br>Subir archivos al servidor:
+<br><br>	
 ```html
 <input id="inputArchivo" type="file" lang="es" accept="*" multiple="multiple">
 ```
@@ -148,17 +112,17 @@ function enviarArchivo() {
 		for(var i=0; i<cant; ++i) formData.append("arrayArchivos[]", input.files[i], input.files[i].name);
 
 		asynjax.post('index.php', {
-			progress: function (percentage) {
-				console.log('Progreso: ' + percentage + '%');
-			},
-			result: function (exitoso, respuesta) {
-				if (exitoso) {
-					console.log('Éxito: ', respuesta);
-				} else {
-					console.error('Error: ' + respuesta);
-				}
-			}
-		}, formData);
+                    formData: formData,
+                    progress: function (porcentaje) {
+                        console.log('Progreso: ' + porcentaje + '%');
+                    }
+                }, function (exitoso, respuesta) {
+                    if (exitoso) {
+                        console.log('Éxito: ', respuesta);
+                    } else {
+                        console.error('Error: ' + respuesta);
+                    }
+                });
 	}
 }
 ```
