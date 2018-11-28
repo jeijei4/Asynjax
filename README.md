@@ -1,4 +1,4 @@
-# Asynjax 
+# Asynjax v2.0.0
 > Asíncrono Ajax sin jQuery
 
 
