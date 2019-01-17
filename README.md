@@ -80,21 +80,33 @@ asynjax.post('index.php', {
 <input id="inputArchivo" type="file" lang="es" accept="*" multiple="multiple">
 ```
 ```js
-//Función que añade un evento a un objeto del DOM
+/**
+ * evento() Añade un evento a un objeto del DOM
+ *
+ * @param {String} txtEvento
+ * @param {Element} elemento
+ * @param {Function} funcion
+ */
 function evento(txtEvento, elemento, funcion) {
-	if (elemento.addEventListener) /* W3C DOM */
-		return elemento.addEventListener(txtEvento.toLowerCase(), funcion, false);
-	else if (elemento.attachEvent) /* IE DOM */
-		return elemento.attachEvent("on" + txtEvento, funcion);
-	else {
-		try {
-			elemento["on" + txtEvento] = funcion;
-		} catch (err) {
-			throw 'No es posible añadir el evento ' + txtEvento;
-			return false;
+	try {
+		if (elemento) {
+			if (elemento.addEventListener) {
+				// W3C DOM
+				elemento.addEventListener(txtEvento.toLowerCase(), funcion, false);
+			} else if (elemento.attachEvent) {
+				//IE 9 - 10 DOM only <Deprecated>
+				elemento.attachEvent("on" + txtEvento, funcion);
+			} else {
+				throw new Error('No es posible añadir el evento ' + txtEvento);
+			}
+		} else {
+			throw new Error('No se encontró el objeto que implementa la interfaz del evento ' + txtEvento);
 		}
+	} catch (e) {
+		throw new Error(e.message);
 	}
 }
+
 ```
 ```js
 //Añadimos el evento Change al elemento inputArchivo para que ejecute la función enviarArchivo:
