@@ -110,10 +110,7 @@ function evento(txtEvento, elemento, funcion) {
 ```
 ```js
 //Añadimos el evento Change al elemento inputArchivo para que ejecute la función enviarArchivo:
-const elemento = document.getElementById('inputArchivo');
-if(elemento){
-	evento('Change', elemento, enviarArchivo);
-}
+evento('Change', document.getElementById('inputArchivo'), enviarArchivo);
 ```
 ```js
 function enviarArchivo() {
